@@ -1,22 +1,33 @@
+using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
-public class Move : State
+
+public class NormalAttackTwo : State
 {
+    public override void enterHandleState(StateMachine stateMachine)
+    {
+        CharachterStateMachine character = (CharachterStateMachine)stateMachine;
+        character.isAttacking = true;
+        character.comboCode = 1;
+        character.animator.Play("Sword_Attack");
+
+    }
     public override void inputHandleState(StateMachine stateMachine)
     {
         CharachterStateMachine character = (CharachterStateMachine)stateMachine;
         PlayerInput playerInput = character.playerInput;
 
-        if (character.Talking())
+        if (character.ChangeTransform())
         {
             return;
         }
 
-        if (character.Attacking())
+        if (character.isAttacking || playerInput.Input.NormalAttack)
         {
             return;
         }
 
-        if (playerInput.Input.JumpDown || playerInput.Input.X != 0 || character.isMoving)
+        if (character.MovementDetected())
         {
             return;
         }
@@ -27,12 +38,12 @@ public class Move : State
     public override void updateHandleState(StateMachine stateMachine)
     {
         CharachterStateMachine character = (CharachterStateMachine)stateMachine;
-        character.MoveUpdateHandle();
     }
 
     public override void exitHandleState(StateMachine stateMachine)
     {
         CharachterStateMachine character = (CharachterStateMachine)stateMachine;
-        character.EndMove();
+        character.isAttacking = false;
+        character.comboCode = 0;
     }
 }

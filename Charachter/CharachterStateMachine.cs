@@ -13,6 +13,7 @@ public class CharachterStateMachine : StateMachine
 
     public bool isMoving;
     public int comboCode;
+    public int transformartion;
     public Animator animator { get; private set; }
     private void Start()
     {
@@ -29,6 +30,12 @@ public class CharachterStateMachine : StateMachine
     }
 
     #region StateMachine
+
+    public string IDLE_STATE { get; private set; } = "Normal_Idle";
+    public string MOVE_STATE { get; private set; } = "Move";
+    public string NORMAL_ATTACK_ONE { get; private set; } = "NC1";
+    public string NORMAL_ATTACK_TWO { get; private set; } = "NC1";
+    public string FIRE_TRANSFORMATION_STATE { get; private set; } = "Fire Transform State";
 
     public void ChangeStateHandler(State newState)
     {
@@ -71,6 +78,52 @@ public class CharachterStateMachine : StateMachine
     public void NotAttacking()
     {
         ChangeStateHandler(new NotAttackedState());
+    }
+
+    public bool ChangeTransform()
+    {
+        if (Input.ChangeTransform == 0)
+        {
+            return false;
+        }
+
+        if (Input.ChangeTransform > 0)
+        {
+            transformartion++;
+            if (transformartion > 4)
+            {
+                transformartion = 0;
+            }
+        }
+
+        if (Input.ChangeTransform < 0)
+        {
+            transformartion--;
+            if (transformartion < 0)
+            {
+                transformartion = 4;
+            }
+        }
+
+        switch (transformartion)
+        {
+            case 0:
+                if (currentState.nameState != IDLE_STATE)
+                {
+                    ChangeStateHandler(new NotAttackedState());
+                    return true;
+                }
+                break;
+            case 1:
+                if (currentState.nameState != FIRE_TRANSFORMATION_STATE)
+                {
+                    ChangeStateHandler(new FireTransformIdle());
+                    return true;
+                }
+                break;
+        }
+
+        return false;
     }
     #endregion
 
@@ -118,7 +171,6 @@ public class CharachterStateMachine : StateMachine
 
         MoveCharacter(); // Actually perform the axis movement
         IsStillMoving(); 
-        animator.SetBool("move", isMoving);
     }
 
     public void IsStillMoving()
@@ -135,7 +187,6 @@ public class CharachterStateMachine : StateMachine
 
     public void EndMove()
     {
-        animator.SetBool("move", false);
         _currentHorizontalSpeed = 0;
         _currentVerticalSpeed = -3;
     }
@@ -422,6 +473,12 @@ public class CharachterStateMachine : StateMachine
 
     #endregion
 
-    #endregion 
+    #endregion
 
+    #region Animator
+    public void ChangeAnimation(string newAnimation)
+    {
+        animator.Play(newAnimation);
+    }
+    #endregion
 }

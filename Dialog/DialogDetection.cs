@@ -20,6 +20,10 @@ public class DialogDetection : MonoBehaviour
 
     private void OnCollisionEnter2D(Collision2D collision)
     {
+        if (collision.collider.gameObject.tag != "DialogLoader")
+        {
+            return;
+        }
         loader =  collision.collider.gameObject.GetComponent<DialogLoader>();
         if (loader == null)
         {
@@ -32,9 +36,12 @@ public class DialogDetection : MonoBehaviour
 
     private void OnCollisionStay2D(Collision2D collision)
     {
+        if (collision.collider.gameObject.tag != "DialogLoader")
+        {
+            return;
+        }
         if (loader == null)
         {
-            loader = collision.collider.gameObject.GetComponent<DialogLoader>();
             return;
         }
         uiButton.TalkButton(loader.talkButton, true);
@@ -42,9 +49,12 @@ public class DialogDetection : MonoBehaviour
 
     private void OnCollisionExit2D(Collision2D collision)
     {
+        if (collision.collider.gameObject.tag != "DialogLoader")
+        {
+            return;
+        }
         if (loader == null)
         {
-            loader = collision.collider.gameObject.GetComponent<DialogLoader>();
             return;
         }
         uiButton.TalkButton(loader.talkButton, false);

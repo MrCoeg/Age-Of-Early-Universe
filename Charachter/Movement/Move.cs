@@ -1,28 +1,33 @@
 using UnityEngine;
-public class NormalAttackOne : State
+public class Move : State
 {
     public override void enterHandleState(StateMachine stateMachine)
     {
         CharachterStateMachine character = (CharachterStateMachine)stateMachine;
-        character.isAttacking = true;
+        character.animator.Play("Move");
     }
+
     public override void inputHandleState(StateMachine stateMachine)
     {
         CharachterStateMachine character = (CharachterStateMachine)stateMachine;
         PlayerInput playerInput = character.playerInput;
-        
-        if(character.comboCode == 1 && playerInput.Input.NormalAttack)
-        {
-            character.ChangeStateHandler(new NormalAttackTwo());
-            return;
-        }
-        
-        if (character.isAttacking || playerInput.Input.NormalAttack)
+
+        if (character.ChangeTransform())
         {
             return;
         }
 
-        if (character.MovementDetected())
+        if (character.Talking())
+        {
+            return;
+        }
+
+        if (character.Attacking())
+        {
+            return;
+        }
+
+        if (playerInput.Input.JumpDown || playerInput.Input.X != 0 || character.isMoving)
         {
             return;
         }
@@ -33,14 +38,12 @@ public class NormalAttackOne : State
     public override void updateHandleState(StateMachine stateMachine)
     {
         CharachterStateMachine character = (CharachterStateMachine)stateMachine;
-        character.animator.SetBool("NC_1", character.isAttacking);
+        character.MoveUpdateHandle();
     }
 
     public override void exitHandleState(StateMachine stateMachine)
     {
         CharachterStateMachine character = (CharachterStateMachine)stateMachine;
-        character.isAttacking = false;
-        character.comboCode = 0;
-        character.animator.SetBool("NC_1", character.isAttacking);
+        character.EndMove();
     }
 }

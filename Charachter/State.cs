@@ -4,6 +4,7 @@ using UnityEngine;
 
 public abstract class State
 {
+    public string nameState { get; protected set; }
     public virtual void enterHandleState(StateMachine stateMachine)
     {
 

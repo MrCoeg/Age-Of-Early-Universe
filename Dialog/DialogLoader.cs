@@ -13,6 +13,8 @@ public class DialogLoader : MonoBehaviour
     [SerializeField] public GameObject talkButton { get; private set; }
     private void Start()
     {
+        gameObject.tag = "DialogLoader";
+
         GameObject container = GameObject.FindGameObjectWithTag("Dialog");
         TextMeshProUGUI[] texts = container.GetComponentsInChildren<TextMeshProUGUI>();
         nameText = texts[0];
