@@ -13,6 +13,8 @@ public class TalkingState : State
 
     public override void enterHandleState(StateMachine stateMachine)
     {
+        CharachterStateMachine character = (CharachterStateMachine)stateMachine;
+        character.ChangeAnimation("FireTransform");
         loader.Talk();
     }
 
@@ -27,7 +29,7 @@ public class TalkingState : State
         }
 
 
-        character.ChangeStateHandler(new NotAttackedState());
+        character.ChangeStateHandler(new FireTransformIdle());
     }
 
     public override void updateHandleState(StateMachine stateMachine)

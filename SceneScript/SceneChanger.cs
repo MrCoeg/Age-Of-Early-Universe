@@ -7,6 +7,7 @@ using UnityEngine.SceneManagement;
 public class SceneChanger : MonoBehaviour
 {
     [SerializeField] SceneProperties sceneProperties;
+    [SerializeField] LoadingScreen loadingScreen;
 
     private void Awake()
     {
@@ -32,11 +33,12 @@ public class SceneChanger : MonoBehaviour
     {
         AsyncOperation loadedScene = SceneManager.LoadSceneAsync(sceneProperties.sceneToChange);
         GetComponent<SceneLoader>().charachterProperties.currentScene = sceneProperties.sceneToChange;
-        // TODO Instantiate Loading Screen
+        loadingScreen.gameObject.SetActive(true);
+        StartCoroutine(loadingScreen.OpenLoadingScreen());
         while (!loadedScene.isDone)
         {
             yield return null;
-            // TODO Destroy Loading Screen
+            StartCoroutine(loadingScreen.CloseLoadingScreen());
         }
     }
 }

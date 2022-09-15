@@ -28,17 +28,12 @@ public class NormalAttackOne : State
             return;
         }
 
-        if (character.MovementDetected())
+        if (character.MovementDetected(new Move()))
         {
             return;
         }
 
         character.ChangeStateHandler(new NotAttackedState());
-    }
-
-    public override void updateHandleState(StateMachine stateMachine)
-    {
-        CharachterStateMachine character = (CharachterStateMachine)stateMachine;
     }
 
     public override void exitHandleState(StateMachine stateMachine)

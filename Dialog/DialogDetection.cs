@@ -5,7 +5,7 @@ using UnityEngine.UI;
 
 public class DialogDetection : MonoBehaviour
 {
-    [SerializeField] public DialogLoader loader { get; private set; }
+    [SerializeField] public DialogLoader loader;
     [SerializeField] private UiButton uiButton;
 
     private void Start()
@@ -18,45 +18,48 @@ public class DialogDetection : MonoBehaviour
         }
     }
 
-    private void OnCollisionEnter2D(Collision2D collision)
+    private void OnTriggerEnter2D(Collider2D collision)
     {
-        if (collision.collider.gameObject.tag != "DialogLoader")
+        if (collision.gameObject.tag != "DialogLoader")
         {
             return;
         }
-        loader =  collision.collider.gameObject.GetComponent<DialogLoader>();
+        loader = collision.gameObject.GetComponent<DialogLoader>();
         if (loader == null)
         {
             return;
         }
 
         uiButton.TalkButton(loader.talkButton, true);
-
     }
 
-    private void OnCollisionStay2D(Collision2D collision)
+    private void OnTriggerStay2D(Collider2D collision)
     {
-        if (collision.collider.gameObject.tag != "DialogLoader")
+        if (collision.gameObject.tag != "DialogLoader")
         {
             return;
         }
+        loader = collision.gameObject.GetComponent<DialogLoader>();
         if (loader == null)
         {
             return;
         }
+
         uiButton.TalkButton(loader.talkButton, true);
     }
 
-    private void OnCollisionExit2D(Collision2D collision)
+    private void OnTriggerExit2D(Collider2D collision)
     {
-        if (collision.collider.gameObject.tag != "DialogLoader")
+        if (collision.gameObject.tag != "DialogLoader")
         {
             return;
         }
+        loader = collision.gameObject.GetComponent<DialogLoader>();
         if (loader == null)
         {
             return;
         }
+
         uiButton.TalkButton(loader.talkButton, false);
     }
 }

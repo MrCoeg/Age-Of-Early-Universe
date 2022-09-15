@@ -17,7 +17,7 @@ public class Prologue : MonoBehaviour
     void OnPlayableDirectorStopped(PlayableDirector aDirector)
     {
         SceneChanger scene = GameObject.FindGameObjectWithTag("MainCamera").GetComponent<SceneChanger>();
-        scene.ChangeSceneIndex(2);
+        scene.ChangeSceneIndex(1);
         scene.ChangeScene();
     }
 }

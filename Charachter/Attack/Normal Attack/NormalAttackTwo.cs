@@ -27,7 +27,7 @@ public class NormalAttackTwo : State
             return;
         }
 
-        if (character.MovementDetected())
+        if (character.MovementDetected(new Move()))
         {
             return;
         }

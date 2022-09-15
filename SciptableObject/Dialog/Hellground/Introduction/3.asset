@@ -9,7 +9,9 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d5a32775575d837408bf655e68f7c3d4, type: 3}
-  m_Name: CharachterData
+  m_Script: {fileID: 11500000, guid: 6dbe4ce469a6ab0448b764866e566612, type: 3}
+  m_Name: 3
   m_EditorClassIdentifier: 
-  currentScene: 5
+  spekaer: Void Ancestors
+  dialog: Hai kamu yang disana, tekan Keyboard A dan D untuk bergerak serta Space
+    untuk melompat

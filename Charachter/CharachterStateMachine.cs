@@ -6,6 +6,7 @@ using TarodevController;
 
 public class CharachterStateMachine : StateMachine
 {
+    [SerializeField] private List<EnemyStateMachine> enemies;
     [SerializeField] FrameInput Input;
     public PlayerInput playerInput { get; private set; }
     public bool isAttacking;
@@ -14,10 +15,21 @@ public class CharachterStateMachine : StateMachine
     public bool isMoving;
     public int comboCode;
     public int transformartion;
+    public bool isDashing;
+
+    public bool facingRight = true;
+    public float damage;
+
     public Animator animator { get; private set; }
+
+    [Header("Instancer")]
+    public Transform FireSlashInstancer;
+    public Transform FireRing;
+
     private void Start()
     {
-        currentState = new NotAttackedState();
+        enemies = new List<EnemyStateMachine>();
+        currentState = new FireTransformIdle();
         playerInput = GetComponent<PlayerInput>();
         Input = playerInput.Input;
         animator = GetComponent<Animator>();
@@ -34,8 +46,10 @@ public class CharachterStateMachine : StateMachine
     public string IDLE_STATE { get; private set; } = "Normal_Idle";
     public string MOVE_STATE { get; private set; } = "Move";
     public string NORMAL_ATTACK_ONE { get; private set; } = "NC1";
-    public string NORMAL_ATTACK_TWO { get; private set; } = "NC1";
+    public string NORMAL_ATTACK_TWO { get; private set; } = "NC2";
     public string FIRE_TRANSFORMATION_STATE { get; private set; } = "Fire Transform State";
+    public string FIRE_ATTACK_ONE { get; private set; } = "Fire_NC1";
+    public string FIRE_ATTACK_TWO { get; private set; } = "Fire_NC2";
 
     public void ChangeStateHandler(State newState)
     {
@@ -44,24 +58,58 @@ public class CharachterStateMachine : StateMachine
         currentState.enterHandleState(this);
     }
 
-    public bool MovementDetected()
+    public bool MovementDetected(State newState)
     {
         if (playerInput.Input.JumpDown || playerInput.Input.X != 0 || isMoving)
         {
-            ChangeStateHandler(new Move());
+            ChangeStateHandler(newState);
             return true;
         }
         return false;
     }
 
-    public bool Attacking()
+    public bool Attacking(State newState)
     {
 
         if (playerInput.Input.NormalAttack || isAttacking)
         {
-            ChangeStateHandler(new NormalAttackOne());
+            ChangeStateHandler(newState);
             return true;
         }
+        return false;
+    }
+
+    public void PlayAudio()
+    {
+        GetComponent<AudioSource>().Play();
+    }
+
+    public bool UseSkill(State []newState)
+    {
+        if (playerInput.Input.SkillOne)
+        {
+            ChangeStateHandler(newState[0]);
+            return true;
+        }
+
+        if (playerInput.Input.SkillTwo)
+        {
+            ChangeStateHandler(newState[1]);
+            return true;
+        }
+
+        if (playerInput.Input.SkillThree)
+        {
+            ChangeStateHandler(newState[2]);
+            return true;
+        }
+
+        if (playerInput.Input.SkillFour)
+        {
+            ChangeStateHandler(newState[3]);
+            return true;
+        }
+
         return false;
     }
 
@@ -139,6 +187,56 @@ public class CharachterStateMachine : StateMachine
         comboCode += 1;
     }
 
+    public void Hit()
+    {
+        for(int i =0; i < enemies.Count; i++)
+        {
+            enemies[i].Damaged(this.damage, isDashing, 3);
+        }
+    }
+
+    private void OnCollisionEnter2D(Collision2D collision)
+    {
+        if (collision.collider.gameObject.tag == "Enemy")
+        {
+            enemies.Add(collision.collider.gameObject.GetComponent<EnemyStateMachine>());
+        }
+
+        if (isDashing)
+        {
+            Hit();
+        }
+    }
+
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        if (collision.gameObject.tag == "Enemy")
+        {
+            enemies.Add(collision.gameObject.GetComponent<EnemyStateMachine>());
+        }
+
+        if (isDashing)
+        {
+            Hit();
+        }
+    }
+
+    private void OnCollisionExit2D(Collision2D collision)
+    {
+        if (collision.collider.gameObject.tag == "Enemy")
+        {
+            enemies.Remove(collision.collider.gameObject.GetComponent<EnemyStateMachine>());
+        }
+    }
+
+    private void OnTriggerExit2D(Collider2D collision)
+    {
+        if (collision.gameObject.tag == "Enemy")
+        {
+            enemies.Remove(collision.gameObject.GetComponent<EnemyStateMachine>());
+        }
+    }
+
     #endregion
 
     #region MoveUpdateHandle
@@ -189,6 +287,28 @@ public class CharachterStateMachine : StateMachine
     {
         _currentHorizontalSpeed = 0;
         _currentVerticalSpeed = -3;
+    }
+
+    public void ForceToMove(float speed)
+    {
+        _currentHorizontalSpeed = speed;
+
+        if (!facingRight)
+        {
+            _currentHorizontalSpeed = -speed;
+        }
+        _currentVerticalSpeed = 0;
+        StartCoroutine(ForcedMove());
+    }
+
+    IEnumerator ForcedMove()
+    {
+        while(_currentHorizontalSpeed != 0)
+        {
+            CalculateWalk();
+            MoveCharacter();
+            yield return null;
+        }
     }
     #endregion
 
@@ -329,6 +449,20 @@ public class CharachterStateMachine : StateMachine
         {
             // Don't walk through walls
             _currentHorizontalSpeed = 0;
+        }
+
+        float _xScale = this.transform.localScale.x;
+
+        if (_currentHorizontalSpeed > 0 && !facingRight)
+        {
+            facingRight = true;
+            this.transform.localScale = new Vector3(-_xScale, this.transform.localScale.y, this.transform.localScale.z);
+        }
+        else if (_currentHorizontalSpeed < 0 && facingRight)
+        {
+
+            this.transform.localScale = new Vector3(-_xScale, this.transform.localScale.y, this.transform.localScale.z);
+            facingRight = false;
         }
     }
 
@@ -480,5 +614,41 @@ public class CharachterStateMachine : StateMachine
     {
         animator.Play(newAnimation);
     }
+
+    public void AddAnimationPrefab(GameObject newSpriteAnimation, Vector3 move, bool isWorld)
+    {
+        GameObject instantiated;
+        if (isWorld)
+        {
+            instantiated = Instantiate(newSpriteAnimation, FireSlashInstancer.transform.position, Quaternion.identity);
+        }
+        else
+        {
+           instantiated = Instantiate(newSpriteAnimation, FireSlashInstancer, false);
+           Vector3 newPos = instantiated.transform.localPosition;
+           newPos = newPos + move;
+           Debug.Log(newPos + " " + instantiated.transform.localRotation + " " + instantiated.transform.localScale );
+
+            StartCoroutine(ChangePos(instantiated, newPos));
+        }
+    }
+
+    public void AddAnimationPrefab(GameObject newSpriteAnimation, Vector3 move)
+    {
+        GameObject instantiated;
+
+        instantiated = Instantiate(newSpriteAnimation, FireRing.transform.position, Quaternion.identity);
+    }
+
+    IEnumerator ChangePos(GameObject Move, Vector3 newPos)
+    {
+
+        while (Move != null)
+        {
+            Move.transform.Translate(newPos * Time.deltaTime, Space.Self);
+            yield return null;
+        }
+    }
+
     #endregion
 }

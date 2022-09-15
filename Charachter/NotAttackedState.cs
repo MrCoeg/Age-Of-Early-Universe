@@ -28,14 +28,14 @@ public class NotAttackedState : State
             return;
         }
 
-        if (character.Attacking())
+        if (character.Attacking(new NormalAttackOne()))
         {
             Debug.Log("A");
 
             return;
         }
 
-        if (character.MovementDetected())
+        if (character.MovementDetected(new Move()))
         {
             Debug.Log("M");
 

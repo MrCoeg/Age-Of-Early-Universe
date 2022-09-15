@@ -1,10 +1,14 @@
+using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
-public class Move : State
+
+public class FireMove : State
 {
+    private State[] skills = { new FireSkillOne(), new FireSkillTwo() , new FireSkillThree(), new FireSkillFour()};
     public override void enterHandleState(StateMachine stateMachine)
     {
         CharachterStateMachine character = (CharachterStateMachine)stateMachine;
-        character.animator.Play("Move");
+        character.animator.Play("FireMove");
     }
 
     public override void inputHandleState(StateMachine stateMachine)
@@ -17,12 +21,17 @@ public class Move : State
             return;
         }
 
+        if (character.UseSkill(skills))
+        {
+            return;
+        }
+
         if (character.Talking())
         {
             return;
         }
 
-        if (character.Attacking(new NormalAttackOne()))
+        if (character.Attacking(new FireNormalAttackOne()))
         {
             return;
         }
@@ -32,7 +41,7 @@ public class Move : State
             return;
         }
 
-        character.ChangeStateHandler(new NotAttackedState());
+        character.ChangeStateHandler(new FireTransformIdle());
     }
 
     public override void updateHandleState(StateMachine stateMachine)

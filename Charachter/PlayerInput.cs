@@ -27,7 +27,11 @@ public class PlayerInput : MonoBehaviour
             X = UnityEngine.Input.GetAxisRaw("Horizontal"),
             NormalAttack = UnityEngine.Input.GetMouseButtonDown(0),
             Talking = UnityEngine.Input.GetKeyDown(KeyCode.F),
-            ChangeTransform = value
+            ChangeTransform = value,
+            SkillOne = UnityEngine.Input.GetKeyDown(KeyCode.Alpha1),
+            SkillTwo = UnityEngine.Input.GetKeyDown(KeyCode.Alpha2),
+            SkillThree = UnityEngine.Input.GetKeyDown(KeyCode.Alpha3),
+            SkillFour = UnityEngine.Input.GetKeyDown(KeyCode.Alpha4),
         };
     }
 }

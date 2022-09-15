@@ -12,5 +12,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 93eb40d473ee461459220e72c57bbf89, type: 3}
   m_Name: Main Menu Scene Data
   m_EditorClassIdentifier: 
-  sceneToChange: 0
+  sceneToChange: 1
   objectsToEnable: []
