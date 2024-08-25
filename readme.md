@@ -20,6 +20,9 @@
 ### 🎮 Genre
 - Hack-and-Slash
 - Combo-based combat
+- 
+### 🎮 Video Project
+[![Age Of Early Universe](https://i.ytimg.com/vi/uiTUVgD3rjQ/hqdefault.jpg?sqp=-oaymwE2CNACELwBSFXyq4qpAygIARUAAIhCGAFwAcABBvABAfgB_AmAAtAFigIMCAAQARgTIFkofzAP&rs=AOn4CLAE1S_m4NKAEUoaZi-UNsCxHvGrKw)](https://www.youtube.com/watch?v=uiTUVgD3rjQ)
 
 ## 👥 Team
 - **Tegar Cahya Bayu Siregar** – Lead Developer (Unity, Game Programming)
