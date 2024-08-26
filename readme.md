@@ -3,6 +3,7 @@
 **Age of Early Universe** is a hack-and-slash game built in Unity over one month for a competition. The game features a character capable of transforming into different elemental forms, each with unique abilities, weapons, and combat styles. This project demonstrates the use of advanced programming principles such as **State Machine architecture** for handling complex combo systems and character states.
 
 ## 📜 Table of Contents
+- [Snipped Code](./Charachter/readme.md#snipping-code)
 - [Overview](#-overview)
 - [Team](#-team)
 - [Technical Details](#-technical-details)
@@ -12,8 +13,6 @@
   - [Combo System](#-combo-system)
 - [State Machine Implementation](#-state-machine-implementation)
 - [Future Development](#-future-development)
-- [Snipped Code](#-snipped-code)
-- [Overview](./Charachter/readme.md#snipping-code)
 ## 📖 Overview
 **Age of Early Universe** focuses on dynamic character transformations, hack-and-slash combat, and a combo system that allows players to perform seamless attacks both on land and in mid-air. The player can transform into various elemental forms, each with unique weapons, abilities, and roles in combat (offense, defense, utility, and buffer).
 
