@@ -13,7 +13,7 @@
 - [State Machine Implementation](#-state-machine-implementation)
 - [Future Development](#-future-development)
 - [Snipped Code](#-snipped-code)
-[Overview](./Charachter/readme.md#snipping-code)
+- [Overview](./Charachter/readme.md#snipping-code)
 ## 📖 Overview
 **Age of Early Universe** focuses on dynamic character transformations, hack-and-slash combat, and a combo system that allows players to perform seamless attacks both on land and in mid-air. The player can transform into various elemental forms, each with unique weapons, abilities, and roles in combat (offense, defense, utility, and buffer).
 
